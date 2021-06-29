@@ -12,7 +12,7 @@ class TimeRemaining extends StatefulWidget {
   final TextStyle? warningsStyle;
   final TextStyle? dangerStyle;
   final VoidCallback? onTimeOver;
-  final DurationFormatter? formtter;
+  final DurationFormatter? formatter;
 
   const TimeRemaining({
     Key? key,
@@ -23,7 +23,7 @@ class TimeRemaining extends StatefulWidget {
     this.warningsStyle,
     this.dangerStyle,
     this.onTimeOver,
-    this.formtter,
+    this.formatter,
   }) : super(key: key);
 
   @override
@@ -41,7 +41,7 @@ class _TimeRemainingState extends State<TimeRemaining> {
     super.initState();
 
     datetime = DateTime.now().add(widget.duration);
-    text = "00:00:00";
+    text = Duration.zero.humanize();
     style = widget.style ?? TextStyle();
 
     if (mounted) {
@@ -60,8 +60,8 @@ class _TimeRemainingState extends State<TimeRemaining> {
                 style = style;
               }
 
-              if (widget.formtter != null) {
-                text = widget.formtter!.call(difference);
+              if (widget.formatter != null) {
+                text = widget.formatter!.call(difference);
               } else {
                 text = difference.humanize();
               }
@@ -71,7 +71,11 @@ class _TimeRemainingState extends State<TimeRemaining> {
           if (mounted) {
             setState(() {
               style = style;
-              text = "00:00:00";
+              if (widget.formatter != null) {
+                text = widget.formatter!.call(Duration.zero);
+              } else {
+                text = Duration.zero.humanize();
+              }
             });
           }
           timer.cancel();
