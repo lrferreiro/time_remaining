@@ -10,7 +10,7 @@ time_remaining tells you in the form of a countdown the exact time remaining unt
 ### Adding package
 
 ```yaml
-time_remaining: ^1.0.1
+time_remaining: ^1.0.2
 ```
 
 ### Importing package
