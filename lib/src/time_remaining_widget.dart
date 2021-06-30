@@ -46,7 +46,7 @@ class _TimeRemainingState extends State<TimeRemaining> {
 
     if (mounted) {
       timer = Timer.periodic(Duration(milliseconds: 200), (Timer timer) {
-        if (datetime.isAfter(DateTime.now())) {
+        if (DateTime.now().isBefore(datetime)) {
           Duration difference = datetime.difference(DateTime.now());
           if (mounted) {
             setState(() {
