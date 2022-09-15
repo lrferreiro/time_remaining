@@ -5,12 +5,18 @@
 
 time_remaining tells you in the form of a countdown the exact time remaining until the time you want is fulfilled.
 
+## Screenshot
+
+|              Examples               |
+| :-----------------------------: |
+| ![](screenshot/screenshot-1.png) |
+
 ## Getting Started
 
 ### Adding package
 
 ```yaml
-time_remaining: ^1.0.2
+time_remaining: ^2.0.0
 ```
 
 ### Importing package
@@ -40,5 +46,8 @@ TimeRemaining(
     fontWeight: FontWeight.bold,
     color: ColorsApp.error,
   ),
+  onTimeOver: () {
+    print("TIME OVER");
+  },
 )
 ```

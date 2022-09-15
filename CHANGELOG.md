@@ -1,11 +1,18 @@
-## [1.0.2]
+## 2.0.0
 
-* Fixed errors detected
+- Migrated to Fkutter 3
+- Fixed errors detected
+- Added example project
+- Added screenshot
 
-## [1.0.1]
+## 1.0.2
 
-* Fixed errors detected
+- Fixed errors detected
 
-## [1.0.0]
+## 1.0.1
 
-* Initial version.
+- Fixed errors detected
+
+## 1.0.0
+
+- Initial version.

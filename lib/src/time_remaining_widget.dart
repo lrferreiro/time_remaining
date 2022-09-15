@@ -5,13 +5,28 @@ import 'extensions.dart';
 typedef DurationFormatter = String Function(Duration duration);
 
 class TimeRemaining extends StatefulWidget {
+  /// Duration time, it is the remaining time for the counter to reach 0
   final Duration duration;
+
+  /// Warning duration time, when the danger time is approaching
   final Duration? warningDuration;
+
+  /// Danger duration time, when there is little time left to finish
   final Duration? dangerDuration;
+
+  /// Style of the text that is applied to the duration time
   final TextStyle? style;
+
+  /// The style of the text that is applied to the duration time of the warning and merges with the style of the duration text
   final TextStyle? warningsStyle;
+
+  /// The style of the text that is applied to the duration time of the hazard and merged with the style of the duration text.
   final TextStyle? dangerStyle;
+
+  /// It is called when the counter reaches 0
   final VoidCallback? onTimeOver;
+
+  /// Allows you to format the output text to the desired style
   final DurationFormatter? formatter;
 
   const TimeRemaining({
@@ -27,7 +42,7 @@ class TimeRemaining extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _TimeRemainingState createState() => _TimeRemainingState();
+  State<TimeRemaining> createState() => _TimeRemainingState();
 }
 
 class _TimeRemainingState extends State<TimeRemaining> {
@@ -38,24 +53,32 @@ class _TimeRemainingState extends State<TimeRemaining> {
 
   @override
   void initState() {
+    _initTimer();
     super.initState();
+  }
 
+  /// Initialize the timer
+  void _initTimer() {
     datetime = DateTime.now().add(widget.duration);
-    text = Duration.zero.humanize();
-    style = widget.style ?? TextStyle();
+    if (widget.formatter != null) {
+      text = widget.formatter!.call(Duration.zero);
+    } else {
+      text = Duration.zero.humanize;
+    }
+    style = widget.style ?? const TextStyle();
 
     if (mounted) {
-      timer = Timer.periodic(Duration(milliseconds: 200), (Timer timer) {
+      timer = Timer.periodic(const Duration(milliseconds: 200), (Timer timer) {
         if (DateTime.now().isBefore(datetime)) {
           Duration difference = datetime.difference(DateTime.now());
           if (mounted) {
             setState(() {
               if (widget.dangerDuration != null &&
                   widget.dangerDuration!.inSeconds >= difference.inSeconds) {
-                style = widget.dangerStyle ?? style;
+                style = style.merge(widget.dangerStyle);
               } else if (widget.warningDuration != null &&
                   widget.warningDuration!.inSeconds >= difference.inSeconds) {
-                style = widget.warningsStyle ?? style;
+                style = style.merge(widget.warningsStyle);
               } else {
                 style = style;
               }
@@ -63,7 +86,7 @@ class _TimeRemainingState extends State<TimeRemaining> {
               if (widget.formatter != null) {
                 text = widget.formatter!.call(difference);
               } else {
-                text = difference.humanize();
+                text = difference.humanize;
               }
             });
           }
@@ -74,7 +97,7 @@ class _TimeRemainingState extends State<TimeRemaining> {
               if (widget.formatter != null) {
                 text = widget.formatter!.call(Duration.zero);
               } else {
-                text = Duration.zero.humanize();
+                text = Duration.zero.humanize;
               }
             });
           }
@@ -83,6 +106,18 @@ class _TimeRemainingState extends State<TimeRemaining> {
         }
       });
     }
+  }
+
+  @override
+  void didUpdateWidget(covariant TimeRemaining oldWidget) {
+    try {
+      if (timer.isActive) {
+        timer.cancel();
+      }
+    } catch (_) {}
+
+    _initTimer();
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
