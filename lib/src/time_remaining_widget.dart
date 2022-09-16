@@ -110,13 +110,28 @@ class _TimeRemainingState extends State<TimeRemaining> {
 
   @override
   void didUpdateWidget(covariant TimeRemaining oldWidget) {
-    try {
-      if (timer.isActive) {
-        timer.cancel();
-      }
-    } catch (_) {}
+    if (oldWidget.duration != widget.duration) {
+      try {
+        if (timer.isActive) {
+          timer.cancel();
+        }
+      } catch (_) {}
 
-    _initTimer();
+      _initTimer();
+    } else {
+      if (oldWidget.formatter != widget.formatter) {
+        if (widget.formatter != null) {
+          text = widget.formatter!.call(Duration.zero);
+        } else {
+          text = Duration.zero.humanize;
+        }
+      }
+
+      if (oldWidget.style != widget.style) {
+        style = widget.style ?? const TextStyle();
+      }
+    }
+
     super.didUpdateWidget(oldWidget);
   }
 
